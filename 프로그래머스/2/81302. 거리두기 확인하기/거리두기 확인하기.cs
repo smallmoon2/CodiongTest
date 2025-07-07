@@ -12,6 +12,7 @@ public class Solution {
             }
 
             answer[i] = IsSafe(place) ? 1 : 0;
+            //Console.Write($"^^^^{i}번째 테이블\n");
         }
 
         return answer;
@@ -19,54 +20,53 @@ public class Solution {
     
     
     public bool IsSafe(string[] place){
-       int[] dx = { -1, 1, 0, 0 };
-        int[] dy = { 0, 0, -1, 1 };
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
 
-        // 대각선
-        int[] diagDx = { -1, -1, 1, 1 };
-        int[] diagDy = { -1, 1, -1, 1 };
-
-        for (int x = 0; x < 5; x++) {
-            for (int y = 0; y < 5; y++) {
+        bool check = true;
+        
+        for(int x = 0; x < 5 ; x++){
+            for(int y = 0; y <5; y++){
                 if (place[x][y] != 'P') continue;
+                
+                //Console.Write($"{x},{y} 시작");
 
-                // 1. 상하좌우 확인
-                for (int d = 0; d < 4; d++) {
-                    int nx = x + dx[d];
-                    int ny = y + dy[d];
+                for(int k = 0; k < 4 ; k++){
+                    int nx = x + dx[k];
+                    int ny = y + dy[k];
+                    
+                    if(nx < 0 || ny < 0 ||  nx >= 5 || ny >=5 ) continue;
 
-                    if (nx < 0 || ny < 0 || nx >= 5 || ny >= 5) continue;
+                    if(place[nx][ny] == 'P'){
 
-                    if (place[nx][ny] == 'P') {
-                        return false; // 거리두기 위반
+                        check =  false;
+                        //Console.Write($"{nx},{ny} 1거름-------------\n");
+
                     }
 
-                    // 2. 맨해튼 거리 2인 경우 (직선 2칸)
-                    int nnx = x + dx[d] * 2;
-                    int nny = y + dy[d] * 2;
-                    if (nnx >= 0 && nny >= 0 && nnx < 5 && nny < 5) {
-                        if (place[nnx][nny] == 'P' && place[nx][ny] != 'X') {
-                            return false;
-                        }
+                    if(place[nx][ny] == 'O'){
+                        //Console.Write($"{nx},{ny} 중간\n");
+                        for(int Rk = 0; Rk < 4 ; Rk++){
+                            int Rnx = nx + dx[Rk];
+                            int Rny = ny + dy[Rk];
+                            
+                            
+                            if(Rnx < 0 || Rny < 0 ||  Rnx >= 5 || Rny >=5 ) continue;
+                            //Console.Write($"-----------------{Rnx},{Rny} 중간 가지치기 {place[Rnx][Rny]} 값\n");
+                            if(place[Rnx][Rny] == 'P' && !(x == Rnx && y == Rny) ){
+
+       
+                                check =  false;
+                                //Console.Write($"{Rnx},{Rny} 2거름-------------\n");
+                            }
+                        }  
                     }
-                }
-
-                // 3. 대각선 확인
-                for (int d = 0; d < 4; d++) {
-                    int nx = x + diagDx[d];
-                    int ny = y + diagDy[d];
-
-                    if (nx < 0 || ny < 0 || nx >= 5 || ny >= 5) continue;
-
-                    if (place[nx][ny] == 'P') {
-                        if (place[x][ny] != 'X' || place[nx][y] != 'X') {
-                            return false;
-                        }
-                    }
+                    
                 }
             }
         }
 
-        return true;
+        return check;
+            
     }
 }
