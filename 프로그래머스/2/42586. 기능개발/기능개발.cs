@@ -1,41 +1,54 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 public class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
+        var answer = new List<int>();
+        var pro = new Queue<int>();
         
-        int frist = 0;
-        int num = 1; 
-        List<int> answer  = new List<int>();
-        int[] count = day(progresses, speeds);
         
-        frist =  count[0];
-        for (int i = 1; i < count.Length; i++){
-            if (frist < count[i]){
-                frist = count[i];
-                answer.Add(num);
-                num = 0;
-            }
-            num ++;
-        }
-        answer.Add(num);
+        for (int i = 0; i < progresses.Length ; i++){
+            int p = progresses[i];
+            int count = 0; 
             
-        return answer.ToArray();;
-    }
-    
-    
-    public int[] day(int[] progresses, int[] speeds){
-        List<int> Rday  = new List<int>();
-        int Tday = 0;
-        for (int i = 0; i < progresses.Length; i++){
-            Tday = 0;
-            while (progresses[i] < 100){
-                progresses[i] = progresses[i] + speeds[i] ;
-                Tday++;
+            while(p < 100){
+                count++;
+                p = progresses[i] + speeds[i] * count;
                 
             }
-            Rday.Add(Tday);
+            
+            pro.Enqueue(count);
+            
+            
+            //progresses[i];
+            //speeds[i];
+            
         }
+        int Maxday = pro.Peek();
+        int Count = 0;
+
         
-        return Rday.ToArray();
+        for(int j = 0; j < progresses.Length ; j++){
+            pro.Dequeue();
+            Count++;
+
+            if(pro.Count() !=0){
+                if (Maxday < pro.Peek()){
+                    answer.Add(Count);
+                    Count = 0;
+                    
+                    Maxday = pro.Peek();
+                }   
+            }
+            
+        }
+        answer.Add(Count);
+            
+        // 7 3 9
+        //pro.Enqueue(1);
+        //Console.Write(pro.Peek());
+        //pro.Dequeue();
+        
+        return answer.ToArray();
     }
 }
