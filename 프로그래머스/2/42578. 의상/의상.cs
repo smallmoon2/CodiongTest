@@ -2,32 +2,33 @@ using System;
 using System.Collections.Generic;
 public class Solution {
     public int solution(string[,] clothes) {
-        int answer = 1;
+        //Console.WriteLine(();
         
-        Dictionary<String,int> clothe_kind = new Dictionary<String, int>();
+        int answer = 1; 
         
-        for(int i = 0; i < clothes.GetLength(0); i++){
-            //clothe_kind.Add = clothes[i];
+        Dictionary<string, int> clothecount = new Dictionary<string, int>();
+        
+        for(int i = 0 ; i < clothes.GetLength(0); i++ ){
             
-            if(clothe_kind.ContainsKey(clothes[i,1])){
-                clothe_kind[clothes[i,1]] ++;
+
+            String type = clothes[i,1];
+            if(clothecount.ContainsKey(type)){
+                
+                clothecount[type] = clothecount[type] + 1;
+                
             }
             else{
-                //clothe_kind.Add(clothes[i,1],1);
-                clothe_kind[clothes[i,1]] = 1;
+                clothecount[type] = 1;
             }
-                
+
+        }
+        
+        foreach(var num in clothecount.Values ){
             
-            Console.WriteLine($"{clothes[i,1]}");
+            answer = answer * (num+1);
             
         }
-                    
-        foreach (var item in clothe_kind)
-        {
-            Console.WriteLine($"종류: {item.Key}, 개수: {item.Value}");
-            answer = answer * (item.Value + 1) ;
-        }
-            
-        return answer - 1 ;
+        
+        return answer -1 ;
     }
 }
